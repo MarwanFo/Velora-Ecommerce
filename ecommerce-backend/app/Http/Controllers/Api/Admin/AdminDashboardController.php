@@ -46,14 +46,15 @@ class AdminDashboardController extends Controller
             ->take(5)
             ->get()
             ->map(function ($order) {
+                $shipping = json_decode($order->shipping_address, true);
                 return [
                     'id' => $order->id,
                     'order_number' => $order->order_number,
-                    'customer_name' => $order->shipping_name,
-                    'customer_email' => $order->shipping_email,
+                    'customer_name' => $shipping['name'] ?? 'N/A',
+                    'customer_email' => $shipping['email'] ?? 'N/A',
                     'total' => $order->total,
                     'status' => $order->status,
-                    'status_label' => $order->status_label,
+                    'status_label' => ucfirst($order->status),
                     'created_at' => $order->created_at,
                 ];
             });
