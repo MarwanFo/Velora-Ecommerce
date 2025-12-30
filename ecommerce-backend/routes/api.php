@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\CheckoutController;
 use App\Http\Controllers\Api\V1\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,15 @@ Route::prefix('v1')->group(function () {
         Route::get('/{slug}', [ProductController::class, 'show']);
     });
 
+    // Checkout route (can be guest or authenticated)
+    Route::post('/checkout', [CheckoutController::class, 'store']);
+    Route::get('/orders/{orderNumber}', [CheckoutController::class, 'show']);
+
+    // User orders (protected)
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/orders', [CheckoutController::class, 'index']);
+    });
+
     // Admin routes (protected)
     Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
 
@@ -67,4 +77,5 @@ Route::prefix('v1')->group(function () {
         Route::delete('/products/{product}/images/{imageId}', [ProductController::class, 'deleteImage']);
     });
 });
+
 
