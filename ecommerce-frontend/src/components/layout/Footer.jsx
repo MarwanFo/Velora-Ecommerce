@@ -9,7 +9,7 @@ const Footer = () => {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="bg-neutral-900 text-white">
+        <footer className="bg-neutral-900 text-neutral-200">
             {/* Newsletter Section */}
             <div className="border-b border-neutral-800">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -44,25 +44,25 @@ const Footer = () => {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                     {/* Shop */}
                     <div>
-                        <h4 className="text-white font-semibold mb-4">Shop</h4>
+                        <h4 className="text-base font-bold text-white mb-4 uppercase tracking-wide">Shop</h4>
                         <ul className="space-y-3 text-sm">
                             <li>
-                                <Link to={ROUTES.products} className="text-white hover:text-primary-300 transition-colors">
+                                <Link to={ROUTES.products} className="text-neutral-300 hover:text-white transition-colors">
                                     All Products
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/categories" className="text-white hover:text-primary-300 transition-colors">
+                                <Link to="/categories" className="text-neutral-300 hover:text-white transition-colors">
                                     Categories
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/new-arrivals" className="text-white hover:text-primary-300 transition-colors">
+                                <Link to="/new-arrivals" className="text-neutral-300 hover:text-white transition-colors">
                                     New Arrivals
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/sale" className="text-white hover:text-primary-300 transition-colors">
+                                <Link to="/sale" className="text-neutral-300 hover:text-white transition-colors">
                                     Sale
                                 </Link>
                             </li>
@@ -71,25 +71,25 @@ const Footer = () => {
 
                     {/* Account */}
                     <div>
-                        <h4 className="text-white font-semibold mb-4">Account</h4>
+                        <h4 className="text-base font-bold text-white mb-4 uppercase tracking-wide">Account</h4>
                         <ul className="space-y-3 text-sm">
                             <li>
-                                <Link to={ROUTES.login} className="text-white hover:text-primary-300 transition-colors">
+                                <Link to={ROUTES.login} className="text-neutral-300 hover:text-white transition-colors">
                                     Sign In
                                 </Link>
                             </li>
                             <li>
-                                <Link to={ROUTES.register} className="text-white hover:text-primary-300 transition-colors">
+                                <Link to={ROUTES.register} className="text-neutral-300 hover:text-white transition-colors">
                                     Create Account
                                 </Link>
                             </li>
                             <li>
-                                <Link to={ROUTES.orders} className="text-white hover:text-primary-300 transition-colors">
+                                <Link to={ROUTES.orders} className="text-neutral-300 hover:text-white transition-colors">
                                     Order History
                                 </Link>
                             </li>
                             <li>
-                                <Link to={ROUTES.wishlist} className="text-white hover:text-primary-300 transition-colors">
+                                <Link to={ROUTES.wishlist} className="text-neutral-300 hover:text-white transition-colors">
                                     Wishlist
                                 </Link>
                             </li>
@@ -98,25 +98,25 @@ const Footer = () => {
 
                     {/* Help */}
                     <div>
-                        <h4 className="text-white font-semibold mb-4">Help</h4>
+                        <h4 className="text-base font-bold text-white mb-4 uppercase tracking-wide">Help</h4>
                         <ul className="space-y-3 text-sm">
                             <li>
-                                <Link to="/contact" className="text-white hover:text-primary-300 transition-colors">
+                                <Link to="/contact" className="text-neutral-300 hover:text-white transition-colors">
                                     Contact Us
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/faq" className="text-white hover:text-primary-300 transition-colors">
+                                <Link to="/faq" className="text-neutral-300 hover:text-white transition-colors">
                                     FAQs
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/shipping" className="text-white hover:text-primary-300 transition-colors">
+                                <Link to="/shipping" className="text-neutral-300 hover:text-white transition-colors">
                                     Shipping Info
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/returns" className="text-white hover:text-primary-300 transition-colors">
+                                <Link to="/returns" className="text-neutral-300 hover:text-white transition-colors">
                                     Returns
                                 </Link>
                             </li>
@@ -125,25 +125,25 @@ const Footer = () => {
 
                     {/* About */}
                     <div>
-                        <h4 className="text-white font-semibold mb-4">About</h4>
+                        <h4 className="text-base font-bold text-white mb-4 uppercase tracking-wide">About</h4>
                         <ul className="space-y-3 text-sm">
                             <li>
-                                <Link to="/about" className="text-white hover:text-primary-300 transition-colors">
+                                <Link to="/about" className="text-neutral-300 hover:text-white transition-colors">
                                     Our Story
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/sustainability" className="text-white hover:text-primary-300 transition-colors">
+                                <Link to="/sustainability" className="text-neutral-300 hover:text-white transition-colors">
                                     Sustainability
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/careers" className="text-white hover:text-primary-300 transition-colors">
+                                <Link to="/careers" className="text-neutral-300 hover:text-white transition-colors">
                                     Careers
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/press" className="text-white hover:text-primary-300 transition-colors">
+                                <Link to="/press" className="text-neutral-300 hover:text-white transition-colors">
                                     Press
                                 </Link>
                             </li>
@@ -205,10 +205,10 @@ const Footer = () => {
 
                         {/* Legal Links */}
                         <div className="flex items-center gap-6 text-sm">
-                            <Link to="/privacy" className="text-white hover:text-primary-300 transition-colors">
+                            <Link to="/privacy" className="text-neutral-300 hover:text-white transition-colors">
                                 Privacy Policy
                             </Link>
-                            <Link to="/terms" className="text-white hover:text-primary-300 transition-colors">
+                            <Link to="/terms" className="text-neutral-300 hover:text-white transition-colors">
                                 Terms of Service
                             </Link>
                         </div>
