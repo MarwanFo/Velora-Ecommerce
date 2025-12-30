@@ -6,6 +6,7 @@ import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import CartSidebar from './components/cart/CartSidebar';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import AdminProtectedRoute from './components/admin/AdminProtectedRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -17,6 +18,12 @@ import OrderConfirmation from './pages/OrderConfirmation';
 import Orders from './pages/Orders';
 import OrderDetail from './pages/OrderDetail';
 import Profile from './pages/Profile';
+// Admin Pages
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminProducts from './pages/admin/AdminProducts';
+import AdminOrders from './pages/admin/AdminOrders';
+import AdminUsers from './pages/admin/AdminUsers';
+import AdminCategories from './pages/admin/AdminCategories';
 import PropTypes from 'prop-types';
 
 /**
@@ -25,7 +32,8 @@ import PropTypes from 'prop-types';
 const Layout = ({ children }) => {
   const location = useLocation();
   const authPages = ['/login', '/register'];
-  const hideLayout = authPages.includes(location.pathname);
+  const adminPages = location.pathname.startsWith('/admin');
+  const hideLayout = authPages.includes(location.pathname) || adminPages;
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -36,7 +44,7 @@ const Layout = ({ children }) => {
         </AnimatePresence>
       </main>
       {!hideLayout && <Footer />}
-      <CartSidebar />
+      {!adminPages && <CartSidebar />}
     </div>
   );
 };
@@ -75,6 +83,26 @@ function App() {
               <Route path="/dashboard/profile" element={
                 <ProtectedRoute><Profile /></ProtectedRoute>
               } />
+
+              {/* Admin Routes (Admin Protected) */}
+              <Route path="/admin" element={
+                <AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>
+              } />
+              <Route path="/admin/products" element={
+                <AdminProtectedRoute><AdminProducts /></AdminProtectedRoute>
+              } />
+              <Route path="/admin/orders" element={
+                <AdminProtectedRoute><AdminOrders /></AdminProtectedRoute>
+              } />
+              <Route path="/admin/orders/:id" element={
+                <AdminProtectedRoute><AdminOrders /></AdminProtectedRoute>
+              } />
+              <Route path="/admin/users" element={
+                <AdminProtectedRoute><AdminUsers /></AdminProtectedRoute>
+              } />
+              <Route path="/admin/categories" element={
+                <AdminProtectedRoute><AdminCategories /></AdminProtectedRoute>
+              } />
             </Routes>
           </Layout>
         </CartProvider>
@@ -84,5 +112,6 @@ function App() {
 }
 
 export default App;
+
 
 
