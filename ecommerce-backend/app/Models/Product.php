@@ -140,4 +140,12 @@ class Product extends Model
     {
         return $this->quantity <= 0;
     }
+
+    /**
+     * Check if product is in stock.
+     */
+    public function getIsInStockAttribute(): bool
+    {
+        return $this->is_active && $this->quantity > 0;
+    }
 }
