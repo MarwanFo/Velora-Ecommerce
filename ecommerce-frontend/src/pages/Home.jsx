@@ -1,6 +1,10 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import Button from '../components/common/Button';
 import { ROUTES } from '../constants/config';
+import productService from '../services/productService';
+import categoryService from '../services/categoryService';
 
 /**
  * Home Page
@@ -8,44 +12,36 @@ import { ROUTES } from '../constants/config';
  * Designed with "human touch" - organic layout, warm colors, personality
  */
 const Home = () => {
-    // Mock featured products (will be replaced with API data)
-    const featuredProducts = [
-        {
-            id: 1,
-            name: 'Artisan Leather Bag',
-            price: 189.00,
-            image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80',
-            badge: 'New',
-        },
-        {
-            id: 2,
-            name: 'Handwoven Scarf',
-            price: 79.00,
-            salePrice: 59.00,
-            image: 'https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=400&q=80',
-            badge: 'Sale',
-        },
-        {
-            id: 3,
-            name: 'Ceramic Vase Set',
-            price: 124.00,
-            image: 'https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=400&q=80',
-        },
-        {
-            id: 4,
-            name: 'Organic Cotton Throw',
-            price: 95.00,
-            image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80',
-            badge: 'Featured',
-        },
-    ];
+    const [featuredProducts, setFeaturedProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const categories = [
-        { name: 'Home & Living', count: 128, image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=400&q=80' },
-        { name: 'Fashion', count: 256, image: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&q=80' },
-        { name: 'Art & Decor', count: 89, image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=400&q=80' },
-        { name: 'Accessories', count: 167, image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80' },
-    ];
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [productsRes, categoriesRes] = await Promise.all([
+                    productService.getFeatured(),
+                    categoryService.getAll()
+                ]);
+                setFeaturedProducts(productsRes.data?.slice(0, 4) || []);
+                setCategories(categoriesRes.data?.slice(0, 4) || []);
+            } catch (error) {
+                console.error('Failed to fetch home data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    // Category images mapping
+    const categoryImages = {
+        'Home Decor': 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=400&q=80',
+        'Ceramics': 'https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=400&q=80',
+        'Textiles': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80',
+        'Accessories': 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80',
+        'default': 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&q=80'
+    };
 
     return (
         <div className="bg-neutral-50">
@@ -54,7 +50,12 @@ const Home = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
                         {/* Hero Text */}
-                        <div className="text-center lg:text-left">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                            className="text-center lg:text-left"
+                        >
                             <span className="inline-block px-4 py-1.5 bg-primary-100 text-primary-700 text-sm font-medium rounded-full mb-6 transform -rotate-1">
                                 New Season Collection
                             </span>
@@ -79,10 +80,15 @@ const Home = () => {
                                     Our Story
                                 </Button>
                             </div>
-                        </div>
+                        </motion.div>
 
                         {/* Hero Image Grid */}
-                        <div className="relative hidden lg:block">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                            className="relative hidden lg:block"
+                        >
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-4 pt-8">
                                     <div className="rounded-2xl overflow-hidden shadow-elevated transform rotate-1 hover:rotate-0 transition-transform duration-500">
@@ -120,7 +126,7 @@ const Home = () => {
                             {/* Decorative elements */}
                             <div className="absolute -top-4 -right-4 w-24 h-24 bg-accent-200 rounded-full opacity-40 blur-xl" />
                             <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-primary-200 rounded-full opacity-30 blur-2xl" />
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
 
@@ -142,11 +148,17 @@ const Home = () => {
                             { icon: '🔒', title: 'Secure Payment', desc: 'Your data is protected' },
                             { icon: '💬', title: '24/7 Support', desc: 'Here to help you' },
                         ].map((badge, index) => (
-                            <div key={index} className="text-center">
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                                className="text-center"
+                            >
                                 <span className="text-3xl mb-2 block">{badge.icon}</span>
                                 <h3 className="font-medium text-neutral-900">{badge.title}</h3>
                                 <p className="text-sm text-neutral-500">{badge.desc}</p>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
                 </div>
@@ -160,50 +172,68 @@ const Home = () => {
                         <h2 className="text-headline text-neutral-950">Featured Products</h2>
                     </div>
 
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {featuredProducts.map((product) => (
-                            <Link
-                                key={product.id}
-                                to={`/products/${product.id}`}
-                                className="group"
-                            >
-                                <div className="card relative overflow-hidden">
-                                    {/* Badge */}
-                                    {product.badge && (
-                                        <span className={`badge absolute top-4 left-4 z-10 ${product.badge === 'Sale' ? 'badge-sale' :
-                                            product.badge === 'New' ? 'badge-new' : 'badge-featured'
-                                            }`}>
-                                            {product.badge}
-                                        </span>
-                                    )}
-
-                                    {/* Image */}
-                                    <div className="aspect-square overflow-hidden rounded-xl mb-4">
-                                        <img
-                                            src={product.image}
-                                            alt={product.name}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                        />
-                                    </div>
-
-                                    {/* Details */}
-                                    <h3 className="font-medium text-neutral-900 group-hover:text-primary-600 transition-colors">
-                                        {product.name}
-                                    </h3>
-                                    <div className="flex items-center gap-2 mt-1">
-                                        {product.salePrice ? (
-                                            <>
-                                                <span className="font-semibold text-primary-600">${product.salePrice}</span>
-                                                <span className="text-sm text-neutral-400 line-through">${product.price}</span>
-                                            </>
-                                        ) : (
-                                            <span className="font-semibold text-neutral-900">${product.price}</span>
-                                        )}
-                                    </div>
+                    {loading ? (
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {[1, 2, 3, 4].map((i) => (
+                                <div key={i} className="animate-pulse">
+                                    <div className="aspect-square bg-neutral-200 rounded-xl mb-4" />
+                                    <div className="h-4 bg-neutral-200 rounded w-3/4 mb-2" />
+                                    <div className="h-4 bg-neutral-200 rounded w-1/2" />
                                 </div>
-                            </Link>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {featuredProducts.map((product, index) => (
+                                <motion.div
+                                    key={product.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.1 }}
+                                >
+                                    <Link to={`/products/${product.slug}`} className="group">
+                                        <div className="card relative overflow-hidden">
+                                            {/* Badge */}
+                                            {product.is_on_sale && (
+                                                <span className="badge badge-sale absolute top-4 left-4 z-10">
+                                                    Sale
+                                                </span>
+                                            )}
+                                            {product.is_featured && !product.is_on_sale && (
+                                                <span className="badge badge-featured absolute top-4 left-4 z-10">
+                                                    Featured
+                                                </span>
+                                            )}
+
+                                            {/* Image */}
+                                            <div className="aspect-square overflow-hidden rounded-xl mb-4 bg-neutral-100">
+                                                <img
+                                                    src={product.primary_image?.url || 'https://placehold.co/400x400/f5f4f1/a8a39a?text=No+Image'}
+                                                    alt={product.name}
+                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                />
+                                            </div>
+
+                                            {/* Details */}
+                                            <h3 className="font-medium text-neutral-900 group-hover:text-primary-600 transition-colors">
+                                                {product.name}
+                                            </h3>
+                                            <div className="flex items-center gap-2 mt-1">
+                                                {product.is_on_sale ? (
+                                                    <>
+                                                        <span className="font-semibold text-primary-600">${product.current_price?.toFixed(2)}</span>
+                                                        <span className="text-sm text-neutral-400 line-through">${product.price?.toFixed(2)}</span>
+                                                    </>
+                                                ) : (
+                                                    <span className="font-semibold text-neutral-900">${product.price?.toFixed(2)}</span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </Link>
+                                </motion.div>
+                            ))}
+                        </div>
+                    )}
 
                     <div className="text-center mt-12">
                         <Link to={ROUTES.products}>
@@ -223,33 +253,52 @@ const Home = () => {
                         <h2 className="text-headline text-neutral-950">Shop Categories</h2>
                     </div>
 
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {categories.map((category, index) => (
-                            <Link
-                                key={index}
-                                to={`/categories/${category.name.toLowerCase().replace(' ', '-')}`}
-                                className="group relative overflow-hidden rounded-2xl aspect-[4/5]"
-                            >
-                                <img
-                                    src={category.image}
-                                    alt={category.name}
-                                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/80 via-neutral-950/20 to-transparent" />
-                                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                                    <h3 className="text-xl font-serif font-medium mb-1">{category.name}</h3>
-                                    <p className="text-neutral-300 text-sm">{category.count} products</p>
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
+                    {loading ? (
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {[1, 2, 3, 4].map((i) => (
+                                <div key={i} className="animate-pulse aspect-[4/5] bg-neutral-200 rounded-2xl" />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {categories.map((category, index) => (
+                                <motion.div
+                                    key={category.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.1 }}
+                                >
+                                    <Link
+                                        to={`/products?category=${category.slug}`}
+                                        className="group relative overflow-hidden rounded-2xl aspect-[4/5] block"
+                                    >
+                                        <img
+                                            src={categoryImages[category.name] || categoryImages.default}
+                                            alt={category.name}
+                                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/80 via-neutral-950/20 to-transparent" />
+                                        <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                            <h3 className="text-xl font-serif font-medium mb-1">{category.name}</h3>
+                                            <p className="text-neutral-300 text-sm">{category.products_count || 0} products</p>
+                                        </div>
+                                    </Link>
+                                </motion.div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </section>
 
             {/* CTA Banner */}
             <section className="py-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary-600 to-primary-700 text-white">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary-600 to-primary-700 text-white"
+                    >
                         <div className="relative z-10 px-8 py-16 md:py-20 md:px-16 text-center">
                             <h2 className="text-3xl md:text-4xl font-serif font-medium mb-4">
                                 Join our community
@@ -271,7 +320,7 @@ const Home = () => {
                         {/* Decorative shapes */}
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500 rounded-full opacity-30 blur-3xl" />
                         <div className="absolute bottom-0 left-0 w-48 h-48 bg-primary-800 rounded-full opacity-40 blur-2xl" />
-                    </div>
+                    </motion.div>
                 </div>
             </section>
         </div>
