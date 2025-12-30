@@ -6,6 +6,8 @@ import Footer from './components/layout/Footer';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Products from './pages/Products';
+import ProductDetail from './pages/ProductDetail';
 import PropTypes from 'prop-types';
 
 /**
@@ -46,7 +48,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            {/* More routes will be added as we build pages */}
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:slug" element={<ProductDetail />} />
           </Routes>
         </Layout>
       </AuthProvider>
@@ -55,3 +58,4 @@ function App() {
 }
 
 export default App;
+
