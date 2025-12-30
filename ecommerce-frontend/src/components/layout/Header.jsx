@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { ROUTES, APP_CONFIG } from '../../constants/config';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
 
 /**
  * Header Component - Main navigation for the store
@@ -10,7 +11,9 @@ import { useCart } from '../../context/CartContext';
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
     const { totalItems, openCart } = useCart();
+    const { user, logout } = useAuth();
 
     return (
         <header className="sticky top-0 z-50 bg-neutral-50/95 backdrop-blur-sm border-b border-neutral-200">
@@ -100,15 +103,61 @@ const Header = () => {
                         </button>
 
                         {/* Account */}
-                        <Link
-                            to={ROUTES.account}
-                            className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-all hidden sm:block"
-                            aria-label="Account"
-                        >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
-                        </Link>
+                        <div className="relative hidden sm:block">
+                            {user ? (
+                                <>
+                                    <button
+                                        onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
+                                        className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-all flex items-center gap-2"
+                                        aria-label="Account menu"
+                                    >
+                                        <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+                                            <span className="text-sm font-medium text-primary-600">
+                                                {user.name?.charAt(0)?.toUpperCase()}
+                                            </span>
+                                        </div>
+                                    </button>
+                                    {isAccountMenuOpen && (
+                                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-neutral-200 py-2 z-50">
+                                            <div className="px-4 py-2 border-b border-neutral-100">
+                                                <p className="font-medium text-neutral-900 truncate">{user.name}</p>
+                                                <p className="text-sm text-neutral-500 truncate">{user.email}</p>
+                                            </div>
+                                            <Link
+                                                to="/dashboard/orders"
+                                                onClick={() => setIsAccountMenuOpen(false)}
+                                                className="block px-4 py-2 text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900"
+                                            >
+                                                My Orders
+                                            </Link>
+                                            <Link
+                                                to="/dashboard/profile"
+                                                onClick={() => setIsAccountMenuOpen(false)}
+                                                className="block px-4 py-2 text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900"
+                                            >
+                                                Profile Settings
+                                            </Link>
+                                            <button
+                                                onClick={() => { logout(); setIsAccountMenuOpen(false); }}
+                                                className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
+                                            >
+                                                Sign Out
+                                            </button>
+                                        </div>
+                                    )}
+                                </>
+                            ) : (
+                                <Link
+                                    to={ROUTES.account}
+                                    className="p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-all"
+                                    aria-label="Account"
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </Link>
+                            )}
+                        </div>
 
                         {/* Mobile Menu Toggle */}
                         <button

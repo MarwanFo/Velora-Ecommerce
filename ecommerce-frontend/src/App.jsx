@@ -5,6 +5,7 @@ import { CartProvider } from './context/CartContext';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import CartSidebar from './components/cart/CartSidebar';
+import ProtectedRoute from './components/common/ProtectedRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -13,6 +14,9 @@ import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import OrderConfirmation from './pages/OrderConfirmation';
+import Orders from './pages/Orders';
+import OrderDetail from './pages/OrderDetail';
+import Profile from './pages/Profile';
 import PropTypes from 'prop-types';
 
 /**
@@ -60,6 +64,17 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/order-confirmation/:orderNumber" element={<OrderConfirmation />} />
+
+              {/* Dashboard Routes (Protected) */}
+              <Route path="/dashboard/orders" element={
+                <ProtectedRoute><Orders /></ProtectedRoute>
+              } />
+              <Route path="/dashboard/orders/:orderNumber" element={
+                <ProtectedRoute><OrderDetail /></ProtectedRoute>
+              } />
+              <Route path="/dashboard/profile" element={
+                <ProtectedRoute><Profile /></ProtectedRoute>
+              } />
             </Routes>
           </Layout>
         </CartProvider>
@@ -69,4 +84,5 @@ function App() {
 }
 
 export default App;
+
 
