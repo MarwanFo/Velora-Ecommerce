@@ -3,22 +3,22 @@ import { APP_CONFIG, ROUTES } from '../../constants/config';
 
 /**
  * Footer Component
- * Organic design with warm feel and helpful links
+ * Organic design with warm feel and helpful links - improved contrast
  */
 const Footer = () => {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="bg-neutral-900 text-neutral-300">
+        <footer className="bg-neutral-900 text-white">
             {/* Newsletter Section */}
             <div className="border-b border-neutral-800">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                         <div className="text-center md:text-left">
-                            <h3 className="text-xl font-serif font-medium text-white mb-2">
+                            <h3 className="text-2xl font-serif font-medium text-white mb-2">
                                 Join our newsletter
                             </h3>
-                            <p className="text-neutral-400">
+                            <p className="text-neutral-100">
                                 Get exclusive offers, new arrivals, and style tips delivered to your inbox.
                             </p>
                         </div>
@@ -26,7 +26,7 @@ const Footer = () => {
                             <input
                                 type="email"
                                 placeholder="Enter your email"
-                                className="flex-1 px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-xl text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all"
+                                className="flex-1 px-4 py-3 bg-neutral-800 border border-neutral-700 rounded-xl text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-all"
                             />
                             <button
                                 type="submit"
@@ -44,25 +44,25 @@ const Footer = () => {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                     {/* Shop */}
                     <div>
-                        <h4 className="text-white font-medium mb-4">Shop</h4>
-                        <ul className="space-y-3">
+                        <h4 className="text-white font-semibold mb-4">Shop</h4>
+                        <ul className="space-y-3 text-sm">
                             <li>
-                                <Link to={ROUTES.products} className="hover:text-white transition-colors">
+                                <Link to={ROUTES.products} className="text-white hover:text-primary-300 transition-colors">
                                     All Products
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/categories" className="hover:text-white transition-colors">
+                                <Link to="/categories" className="text-white hover:text-primary-300 transition-colors">
                                     Categories
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/new-arrivals" className="hover:text-white transition-colors">
+                                <Link to="/new-arrivals" className="text-white hover:text-primary-300 transition-colors">
                                     New Arrivals
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/sale" className="hover:text-white transition-colors">
+                                <Link to="/sale" className="text-white hover:text-primary-300 transition-colors">
                                     Sale
                                 </Link>
                             </li>
@@ -71,25 +71,25 @@ const Footer = () => {
 
                     {/* Account */}
                     <div>
-                        <h4 className="text-white font-medium mb-4">Account</h4>
-                        <ul className="space-y-3">
+                        <h4 className="text-white font-semibold mb-4">Account</h4>
+                        <ul className="space-y-3 text-sm">
                             <li>
-                                <Link to={ROUTES.login} className="hover:text-white transition-colors">
+                                <Link to={ROUTES.login} className="text-white hover:text-primary-300 transition-colors">
                                     Sign In
                                 </Link>
                             </li>
                             <li>
-                                <Link to={ROUTES.register} className="hover:text-white transition-colors">
+                                <Link to={ROUTES.register} className="text-white hover:text-primary-300 transition-colors">
                                     Create Account
                                 </Link>
                             </li>
                             <li>
-                                <Link to={ROUTES.orders} className="hover:text-white transition-colors">
+                                <Link to={ROUTES.orders} className="text-white hover:text-primary-300 transition-colors">
                                     Order History
                                 </Link>
                             </li>
                             <li>
-                                <Link to={ROUTES.wishlist} className="hover:text-white transition-colors">
+                                <Link to={ROUTES.wishlist} className="text-white hover:text-primary-300 transition-colors">
                                     Wishlist
                                 </Link>
                             </li>
@@ -98,25 +98,25 @@ const Footer = () => {
 
                     {/* Help */}
                     <div>
-                        <h4 className="text-white font-medium mb-4">Help</h4>
-                        <ul className="space-y-3">
+                        <h4 className="text-white font-semibold mb-4">Help</h4>
+                        <ul className="space-y-3 text-sm">
                             <li>
-                                <Link to="/contact" className="hover:text-white transition-colors">
+                                <Link to="/contact" className="text-white hover:text-primary-300 transition-colors">
                                     Contact Us
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/faq" className="hover:text-white transition-colors">
+                                <Link to="/faq" className="text-white hover:text-primary-300 transition-colors">
                                     FAQs
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/shipping" className="hover:text-white transition-colors">
+                                <Link to="/shipping" className="text-white hover:text-primary-300 transition-colors">
                                     Shipping Info
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/returns" className="hover:text-white transition-colors">
+                                <Link to="/returns" className="text-white hover:text-primary-300 transition-colors">
                                     Returns
                                 </Link>
                             </li>
@@ -125,25 +125,25 @@ const Footer = () => {
 
                     {/* About */}
                     <div>
-                        <h4 className="text-white font-medium mb-4">About</h4>
-                        <ul className="space-y-3">
+                        <h4 className="text-white font-semibold mb-4">About</h4>
+                        <ul className="space-y-3 text-sm">
                             <li>
-                                <Link to="/about" className="hover:text-white transition-colors">
+                                <Link to="/about" className="text-white hover:text-primary-300 transition-colors">
                                     Our Story
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/sustainability" className="hover:text-white transition-colors">
+                                <Link to="/sustainability" className="text-white hover:text-primary-300 transition-colors">
                                     Sustainability
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/careers" className="hover:text-white transition-colors">
+                                <Link to="/careers" className="text-white hover:text-primary-300 transition-colors">
                                     Careers
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/press" className="hover:text-white transition-colors">
+                                <Link to="/press" className="text-white hover:text-primary-300 transition-colors">
                                     Press
                                 </Link>
                             </li>
@@ -157,11 +157,11 @@ const Footer = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                         {/* Logo & Copyright */}
-                        <div className="flex items-center gap-4">
+                        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
                             <span className="text-xl font-serif font-medium text-white">
                                 {APP_CONFIG.name}
                             </span>
-                            <span className="text-neutral-500">
+                            <span className="text-sm text-neutral-400">
                                 © {currentYear} All rights reserved.
                             </span>
                         </div>
@@ -172,7 +172,7 @@ const Footer = () => {
                                 href="https://instagram.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="p-2 hover:text-white hover:bg-neutral-800 rounded-lg transition-all"
+                                className="p-2 text-neutral-300 hover:text-white hover:bg-neutral-800 rounded-lg transition-all"
                                 aria-label="Instagram"
                             >
                                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -183,7 +183,7 @@ const Footer = () => {
                                 href="https://twitter.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="p-2 hover:text-white hover:bg-neutral-800 rounded-lg transition-all"
+                                className="p-2 text-neutral-300 hover:text-white hover:bg-neutral-800 rounded-lg transition-all"
                                 aria-label="Twitter"
                             >
                                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -194,7 +194,7 @@ const Footer = () => {
                                 href="https://facebook.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="p-2 hover:text-white hover:bg-neutral-800 rounded-lg transition-all"
+                                className="p-2 text-neutral-300 hover:text-white hover:bg-neutral-800 rounded-lg transition-all"
                                 aria-label="Facebook"
                             >
                                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -205,10 +205,10 @@ const Footer = () => {
 
                         {/* Legal Links */}
                         <div className="flex items-center gap-6 text-sm">
-                            <Link to="/privacy" className="hover:text-white transition-colors">
+                            <Link to="/privacy" className="text-white hover:text-primary-300 transition-colors">
                                 Privacy Policy
                             </Link>
-                            <Link to="/terms" className="hover:text-white transition-colors">
+                            <Link to="/terms" className="text-white hover:text-primary-300 transition-colors">
                                 Terms of Service
                             </Link>
                         </div>
