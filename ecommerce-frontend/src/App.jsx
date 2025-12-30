@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import { AuthProvider } from './context/AuthContext';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
@@ -19,7 +20,9 @@ const Layout = ({ children }) => {
     <div className="flex flex-col min-h-screen">
       {!hideLayout && <Header />}
       <main className={hideLayout ? '' : 'flex-1'}>
-        {children}
+        <AnimatePresence mode="wait">
+          {children}
+        </AnimatePresence>
       </main>
       {!hideLayout && <Footer />}
     </div>
