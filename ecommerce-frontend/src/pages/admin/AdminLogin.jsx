@@ -31,7 +31,7 @@ const AdminLogin = () => {
         setError('');
 
         try {
-            const response = await authService.login(formData.email, formData.password);
+            const response = await authService.login(formData);
 
             // Check if user is admin
             if (!response.data.user.is_admin) {
