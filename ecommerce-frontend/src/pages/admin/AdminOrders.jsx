@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import AdminLayout from '../../components/admin/AdminLayout';
 import adminService from '../../services/adminService';
@@ -24,9 +23,12 @@ const AdminOrders = () => {
             const params = {};
             if (statusFilter !== 'all') params.status = statusFilter;
             const response = await adminService.getOrders(params);
-            setOrders(response.data || []);
+            // Handle both array and paginated response
+            const data = response.data?.data || response.data || [];
+            setOrders(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error('Failed to fetch orders:', error);
+            setOrders([]);
         } finally {
             setLoading(false);
         }
@@ -39,6 +41,11 @@ const AdminOrders = () => {
         } catch (error) {
             console.error('Failed to update status:', error);
         }
+    };
+
+    const formatPrice = (value) => {
+        const num = parseFloat(value) || 0;
+        return `$${num.toFixed(2)}`;
     };
 
     const getStatusColor = (status) => {
@@ -62,11 +69,30 @@ const AdminOrders = () => {
         return colors[status] || 'text-neutral-400';
     };
 
-    const filteredOrders = orders.filter(o =>
-        o.order_number?.toLowerCase().includes(search.toLowerCase()) ||
-        o.shipping?.email?.toLowerCase().includes(search.toLowerCase()) ||
-        o.shipping?.name?.toLowerCase().includes(search.toLowerCase())
-    );
+    // Get customer info from order
+    const getCustomerInfo = (order) => {
+        // Try different possible structures
+        if (order.shipping_address) {
+            const shipping = typeof order.shipping_address === 'string'
+                ? JSON.parse(order.shipping_address)
+                : order.shipping_address;
+            return { name: shipping.name || 'N/A', email: shipping.email || '' };
+        }
+        if (order.shipping) {
+            return { name: order.shipping.name || 'N/A', email: order.shipping.email || '' };
+        }
+        if (order.user) {
+            return { name: order.user.name || 'N/A', email: order.user.email || '' };
+        }
+        return { name: 'Guest', email: '' };
+    };
+
+    const filteredOrders = orders.filter(o => {
+        const customer = getCustomerInfo(o);
+        return o.order_number?.toLowerCase().includes(search.toLowerCase()) ||
+            customer.email?.toLowerCase().includes(search.toLowerCase()) ||
+            customer.name?.toLowerCase().includes(search.toLowerCase());
+    });
 
     return (
         <AdminLayout>
@@ -117,7 +143,6 @@ const AdminOrders = () => {
                                 <tr>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-neutral-400 uppercase">Order</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-neutral-400 uppercase">Customer</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-400 uppercase">Items</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-neutral-400 uppercase">Total</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-neutral-400 uppercase">Payment</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-neutral-400 uppercase">Status</th>
@@ -130,7 +155,6 @@ const AdminOrders = () => {
                                         <tr key={i} className="animate-pulse">
                                             <td className="px-6 py-4"><div className="h-4 bg-neutral-700 rounded w-24" /></td>
                                             <td className="px-6 py-4"><div className="h-4 bg-neutral-700 rounded w-32" /></td>
-                                            <td className="px-6 py-4"><div className="h-4 bg-neutral-700 rounded w-12" /></td>
                                             <td className="px-6 py-4"><div className="h-4 bg-neutral-700 rounded w-16" /></td>
                                             <td className="px-6 py-4"><div className="h-4 bg-neutral-700 rounded w-16" /></td>
                                             <td className="px-6 py-4"><div className="h-4 bg-neutral-700 rounded w-20" /></td>
@@ -138,49 +162,49 @@ const AdminOrders = () => {
                                         </tr>
                                     ))
                                 ) : filteredOrders.length > 0 ? (
-                                    filteredOrders.map((order) => (
-                                        <tr key={order.id} className="hover:bg-neutral-700/30">
-                                            <td className="px-6 py-4">
-                                                <Link to={`/admin/orders/${order.id}`} className="text-primary-400 hover:text-primary-300 font-mono">
-                                                    {order.order_number}
-                                                </Link>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <p className="text-white">{order.shipping?.name}</p>
-                                                <p className="text-neutral-400 text-sm">{order.shipping?.email}</p>
-                                            </td>
-                                            <td className="px-6 py-4 text-neutral-300">
-                                                {order.item_count} item{order.item_count !== 1 ? 's' : ''}
-                                            </td>
-                                            <td className="px-6 py-4 text-white font-medium">
-                                                ${order.totals?.total?.toFixed(2)}
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <span className={`capitalize ${getPaymentColor(order.payment_status)}`}>
-                                                    {order.payment_status}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <select
-                                                    value={order.status}
-                                                    onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                                                    className={`px-2 py-1 text-xs font-medium rounded bg-transparent cursor-pointer ${getStatusColor(order.status)}`}
-                                                >
-                                                    <option value="pending" className="bg-neutral-800">Pending</option>
-                                                    <option value="processing" className="bg-neutral-800">Processing</option>
-                                                    <option value="shipped" className="bg-neutral-800">Shipped</option>
-                                                    <option value="delivered" className="bg-neutral-800">Delivered</option>
-                                                    <option value="cancelled" className="bg-neutral-800">Cancelled</option>
-                                                </select>
-                                            </td>
-                                            <td className="px-6 py-4 text-neutral-400 text-sm">
-                                                {new Date(order.created_at).toLocaleDateString()}
-                                            </td>
-                                        </tr>
-                                    ))
+                                    filteredOrders.map((order) => {
+                                        const customer = getCustomerInfo(order);
+                                        return (
+                                            <tr key={order.id} className="hover:bg-neutral-700/30">
+                                                <td className="px-6 py-4">
+                                                    <span className="text-primary-400 font-mono">
+                                                        {order.order_number || `#${order.id}`}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <p className="text-white">{customer.name}</p>
+                                                    <p className="text-neutral-400 text-sm">{customer.email}</p>
+                                                </td>
+                                                <td className="px-6 py-4 text-white font-medium">
+                                                    {formatPrice(order.total)}
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <span className={`capitalize ${getPaymentColor(order.payment_status)}`}>
+                                                        {order.payment_status || 'pending'}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <select
+                                                        value={order.status || 'pending'}
+                                                        onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                                                        className={`px-2 py-1 text-xs font-medium rounded bg-transparent cursor-pointer ${getStatusColor(order.status)}`}
+                                                    >
+                                                        <option value="pending" className="bg-neutral-800">Pending</option>
+                                                        <option value="processing" className="bg-neutral-800">Processing</option>
+                                                        <option value="shipped" className="bg-neutral-800">Shipped</option>
+                                                        <option value="delivered" className="bg-neutral-800">Delivered</option>
+                                                        <option value="cancelled" className="bg-neutral-800">Cancelled</option>
+                                                    </select>
+                                                </td>
+                                                <td className="px-6 py-4 text-neutral-400 text-sm">
+                                                    {order.created_at ? new Date(order.created_at).toLocaleDateString() : 'N/A'}
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
                                 ) : (
                                     <tr>
-                                        <td colSpan={7} className="px-6 py-12 text-center text-neutral-400">
+                                        <td colSpan={6} className="px-6 py-12 text-center text-neutral-400">
                                             No orders found
                                         </td>
                                     </tr>

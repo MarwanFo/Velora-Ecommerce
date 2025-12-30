@@ -11,14 +11,16 @@ import adminService from '../../services/adminService';
 const AdminDashboard = () => {
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchStats = async () => {
             try {
                 const response = await adminService.getDashboard();
-                setStats(response.data);
-            } catch (error) {
-                console.error('Failed to fetch dashboard stats:', error);
+                setStats(response.data || {});
+            } catch (err) {
+                console.error('Failed to fetch dashboard stats:', err);
+                setError('Failed to load dashboard data');
             } finally {
                 setLoading(false);
             }
@@ -26,10 +28,15 @@ const AdminDashboard = () => {
         fetchStats();
     }, []);
 
+    const formatPrice = (value) => {
+        const num = parseFloat(value) || 0;
+        return `$${num.toFixed(2)}`;
+    };
+
     const statCards = [
         {
             title: 'Total Revenue',
-            value: stats?.revenue?.total ? `$${stats.revenue.total.toFixed(2)}` : '$0.00',
+            value: formatPrice(stats?.revenue?.total),
             icon: '💰',
             color: 'bg-green-500',
         },
@@ -80,6 +87,24 @@ const AdminDashboard = () => {
             </AdminLayout>
         );
     }
+
+    if (error) {
+        return (
+            <AdminLayout>
+                <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6 text-center">
+                    <p className="text-red-400">{error}</p>
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg"
+                    >
+                        Retry
+                    </button>
+                </div>
+            </AdminLayout>
+        );
+    }
+
+    const recentOrders = stats?.recent_orders || [];
 
     return (
         <AdminLayout>
@@ -180,19 +205,19 @@ const AdminDashboard = () => {
                         <h2 className="text-lg font-semibold text-white mb-4">Quick Actions</h2>
                         <div className="space-y-3">
                             <Link
-                                to="/admin/products/new"
+                                to="/vl-control-panel/inventory"
                                 className="block w-full px-4 py-2 bg-primary-600 text-white text-center rounded-lg hover:bg-primary-700 transition-colors"
                             >
-                                Add New Product
+                                Manage Products
                             </Link>
                             <Link
-                                to="/admin/orders"
+                                to="/vl-control-panel/transactions"
                                 className="block w-full px-4 py-2 bg-neutral-700 text-white text-center rounded-lg hover:bg-neutral-600 transition-colors"
                             >
                                 View All Orders
                             </Link>
                             <Link
-                                to="/admin/categories"
+                                to="/vl-control-panel/taxonomy"
                                 className="block w-full px-4 py-2 bg-neutral-700 text-white text-center rounded-lg hover:bg-neutral-600 transition-colors"
                             >
                                 Manage Categories
@@ -210,7 +235,7 @@ const AdminDashboard = () => {
                 >
                     <div className="p-6 border-b border-neutral-700 flex items-center justify-between">
                         <h2 className="text-lg font-semibold text-white">Recent Orders</h2>
-                        <Link to="/admin/orders" className="text-primary-400 hover:text-primary-300 text-sm">
+                        <Link to="/vl-control-panel/transactions" className="text-primary-400 hover:text-primary-300 text-sm">
                             View all →
                         </Link>
                     </div>
@@ -226,26 +251,26 @@ const AdminDashboard = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-neutral-700">
-                                {stats?.recent_orders?.length > 0 ? (
-                                    stats.recent_orders.map((order) => (
+                                {recentOrders.length > 0 ? (
+                                    recentOrders.map((order) => (
                                         <tr key={order.id} className="hover:bg-neutral-700/30">
                                             <td className="px-6 py-4">
-                                                <Link to={`/admin/orders/${order.id}`} className="text-primary-400 hover:text-primary-300">
-                                                    {order.order_number}
-                                                </Link>
+                                                <span className="text-primary-400 font-mono">
+                                                    {order.order_number || 'N/A'}
+                                                </span>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <p className="text-white">{order.customer_name}</p>
-                                                <p className="text-neutral-400 text-sm">{order.customer_email}</p>
+                                                <p className="text-white">{order.customer_name || 'Guest'}</p>
+                                                <p className="text-neutral-400 text-sm">{order.customer_email || ''}</p>
                                             </td>
                                             <td className="px-6 py-4">
                                                 <span className={`px-2 py-1 text-xs font-medium rounded ${getStatusColor(order.status)}`}>
-                                                    {order.status_label}
+                                                    {order.status_label || order.status || 'Unknown'}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 text-white">${order.total?.toFixed(2)}</td>
+                                            <td className="px-6 py-4 text-white">{formatPrice(order.total)}</td>
                                             <td className="px-6 py-4 text-neutral-400 text-sm">
-                                                {new Date(order.created_at).toLocaleDateString()}
+                                                {order.created_at ? new Date(order.created_at).toLocaleDateString() : 'N/A'}
                                             </td>
                                         </tr>
                                     ))

@@ -24,9 +24,12 @@ const AdminProducts = () => {
             const params = {};
             if (filter !== 'all') params.status = filter;
             const response = await adminService.getProducts(params);
-            setProducts(response.data || []);
+            // Handle both array and paginated response
+            const data = response.data?.data || response.data || [];
+            setProducts(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error('Failed to fetch products:', error);
+            setProducts([]);
         } finally {
             setLoading(false);
         }
@@ -51,9 +54,14 @@ const AdminProducts = () => {
         }
     };
 
+    const formatPrice = (value) => {
+        const num = parseFloat(value) || 0;
+        return `$${num.toFixed(2)}`;
+    };
+
     const filteredProducts = products.filter(p =>
-        p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.sku?.toLowerCase().includes(search.toLowerCase())
+        (p.name || '').toLowerCase().includes(search.toLowerCase()) ||
+        (p.sku || '').toLowerCase().includes(search.toLowerCase())
     );
 
     return (
@@ -66,7 +74,7 @@ const AdminProducts = () => {
                         <p className="text-neutral-400">Manage your product inventory</p>
                     </div>
                     <Link
-                        to="/admin/products/new"
+                        to="/vl-control-panel/inventory/new"
                         className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors inline-flex items-center gap-2"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -140,31 +148,31 @@ const AdminProducts = () => {
                                                 <div className="flex items-center gap-3">
                                                     <div className="w-10 h-10 bg-neutral-700 rounded-lg overflow-hidden">
                                                         <img
-                                                            src={product.primary_image?.url || 'https://placehold.co/40x40/374151/9ca3af?text=?'}
+                                                            src={product.primary_image?.url || product.images?.[0]?.url || 'https://placehold.co/40x40/374151/9ca3af?text=?'}
                                                             alt={product.name}
                                                             className="w-full h-full object-cover"
                                                         />
                                                     </div>
                                                     <div>
-                                                        <p className="text-white font-medium">{product.name}</p>
-                                                        <p className="text-neutral-400 text-sm">{product.category?.name}</p>
+                                                        <p className="text-white font-medium">{product.name || 'Unnamed'}</p>
+                                                        <p className="text-neutral-400 text-sm">{product.category?.name || 'Uncategorized'}</p>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 text-neutral-300 font-mono text-sm">{product.sku || '-'}</td>
                                             <td className="px-6 py-4">
-                                                {product.is_on_sale ? (
+                                                {product.sale_price && product.sale_price < product.price ? (
                                                     <div>
-                                                        <span className="text-primary-400">${product.current_price?.toFixed(2)}</span>
-                                                        <span className="text-neutral-500 line-through text-sm ml-2">${product.price?.toFixed(2)}</span>
+                                                        <span className="text-primary-400">{formatPrice(product.sale_price)}</span>
+                                                        <span className="text-neutral-500 line-through text-sm ml-2">{formatPrice(product.price)}</span>
                                                     </div>
                                                 ) : (
-                                                    <span className="text-white">${product.price?.toFixed(2)}</span>
+                                                    <span className="text-white">{formatPrice(product.price)}</span>
                                                 )}
                                             </td>
                                             <td className="px-6 py-4">
-                                                <span className={`${product.quantity <= 0 ? 'text-red-400' : product.quantity <= product.low_stock_threshold ? 'text-orange-400' : 'text-white'}`}>
-                                                    {product.quantity}
+                                                <span className={`${(product.quantity || 0) <= 0 ? 'text-red-400' : (product.quantity || 0) <= (product.low_stock_threshold || 5) ? 'text-orange-400' : 'text-white'}`}>
+                                                    {product.quantity || 0}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4">
@@ -178,7 +186,7 @@ const AdminProducts = () => {
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center justify-end gap-2">
                                                     <Link
-                                                        to={`/admin/products/${product.id}/edit`}
+                                                        to={`/vl-control-panel/inventory/${product.id}/edit`}
                                                         className="p-2 text-neutral-400 hover:text-white hover:bg-neutral-700 rounded"
                                                     >
                                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -23,9 +23,12 @@ const AdminUsers = () => {
             const params = {};
             if (roleFilter !== 'all') params.role = roleFilter;
             const response = await adminService.getUsers(params);
-            setUsers(response.data || []);
+            // Handle both array and paginated response
+            const data = response.data?.data || response.data || [];
+            setUsers(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error('Failed to fetch users:', error);
+            setUsers([]);
         } finally {
             setLoading(false);
         }
@@ -128,7 +131,7 @@ const AdminUsers = () => {
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4 text-neutral-400 text-sm">
-                                                {new Date(user.created_at).toLocaleDateString()}
+                                                {user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center justify-end gap-2">

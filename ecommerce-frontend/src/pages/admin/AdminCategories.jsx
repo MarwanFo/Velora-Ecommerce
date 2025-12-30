@@ -22,9 +22,12 @@ const AdminCategories = () => {
         setLoading(true);
         try {
             const response = await adminService.getCategories();
-            setCategories(response.data || []);
+            // Handle both array and paginated response
+            const data = response.data?.data || response.data || [];
+            setCategories(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error('Failed to fetch categories:', error);
+            setCategories([]);
         } finally {
             setLoading(false);
         }
