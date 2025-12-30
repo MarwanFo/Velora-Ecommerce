@@ -17,7 +17,7 @@ const AdminLogin = () => {
 
     // Redirect if already logged in as admin
     if (user?.is_admin) {
-        return <Navigate to="/admin" replace />;
+        return <Navigate to="/vl-control-panel" replace />;
     }
 
     const handleChange = (e) => {
@@ -43,7 +43,7 @@ const AdminLogin = () => {
 
             // Login successful and user is admin
             login(response.data.user, response.data.token);
-            navigate('/admin');
+            navigate('/vl-control-panel');
         } catch (err) {
             setError(err.response?.data?.message || 'Invalid admin credentials');
             setLoading(false);

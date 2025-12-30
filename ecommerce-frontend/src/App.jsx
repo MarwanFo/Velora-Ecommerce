@@ -33,7 +33,7 @@ import PropTypes from 'prop-types';
 const Layout = ({ children }) => {
   const location = useLocation();
   const authPages = ['/login', '/register'];
-  const adminPages = location.pathname.startsWith('/admin');
+  const adminPages = location.pathname.startsWith('/vl-control-panel');
   const hideLayout = authPages.includes(location.pathname) || adminPages;
 
   return (
@@ -86,25 +86,25 @@ function App() {
               } />
 
               {/* Admin Login (Public) */}
-              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/vl-control-panel/auth" element={<AdminLogin />} />
 
-              {/* Admin Routes (Admin Protected) */}
-              <Route path="/admin" element={
+              {/* Admin Routes (Admin Protected) - Obscured paths */}
+              <Route path="/vl-control-panel" element={
                 <AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>
               } />
-              <Route path="/admin/products" element={
+              <Route path="/vl-control-panel/inventory" element={
                 <AdminProtectedRoute><AdminProducts /></AdminProtectedRoute>
               } />
-              <Route path="/admin/orders" element={
+              <Route path="/vl-control-panel/transactions" element={
                 <AdminProtectedRoute><AdminOrders /></AdminProtectedRoute>
               } />
-              <Route path="/admin/orders/:id" element={
+              <Route path="/vl-control-panel/transactions/:id" element={
                 <AdminProtectedRoute><AdminOrders /></AdminProtectedRoute>
               } />
-              <Route path="/admin/users" element={
+              <Route path="/vl-control-panel/accounts" element={
                 <AdminProtectedRoute><AdminUsers /></AdminProtectedRoute>
               } />
-              <Route path="/admin/categories" element={
+              <Route path="/vl-control-panel/taxonomy" element={
                 <AdminProtectedRoute><AdminCategories /></AdminProtectedRoute>
               } />
             </Routes>
@@ -116,6 +116,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

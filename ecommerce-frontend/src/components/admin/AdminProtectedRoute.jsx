@@ -19,11 +19,11 @@ const AdminProtectedRoute = ({ children }) => {
     }
 
     if (!user) {
-        return <Navigate to="/admin/login" state={{ from: location }} replace />;
+        return <Navigate to="/vl-control-panel/auth" state={{ from: location }} replace />;
     }
 
     if (!user.is_admin) {
-        return <Navigate to="/admin/login" state={{ from: location }} replace />;
+        return <Navigate to="/vl-control-panel/auth" state={{ from: location }} replace />;
     }
 
     return children;
@@ -34,4 +34,5 @@ AdminProtectedRoute.propTypes = {
 };
 
 export default AdminProtectedRoute;
+
 
