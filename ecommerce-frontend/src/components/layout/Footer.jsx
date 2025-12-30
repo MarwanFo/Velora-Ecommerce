@@ -15,7 +15,7 @@ const Footer = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                         <div className="text-center md:text-left">
-                            <h3 className="text-2xl font-serif font-medium text-white mb-2">
+                            <h3 className="text-2xl font-serif font-medium mb-2" style={{ color: '#ffffff' }}>
                                 Join our newsletter
                             </h3>
                             <p className="text-neutral-100">
@@ -44,7 +44,7 @@ const Footer = () => {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                     {/* Shop */}
                     <div>
-                        <h4 className="text-base font-bold text-white mb-4 uppercase tracking-wide">Shop</h4>
+                        <h4 className="text-base font-bold mb-4 uppercase tracking-wide" style={{ color: '#ffffff' }}>Shop</h4>
                         <ul className="space-y-3 text-sm">
                             <li>
                                 <Link to={ROUTES.products} className="text-neutral-300 hover:text-white transition-colors">
@@ -71,7 +71,7 @@ const Footer = () => {
 
                     {/* Account */}
                     <div>
-                        <h4 className="text-base font-bold text-white mb-4 uppercase tracking-wide">Account</h4>
+                        <h4 className="text-base font-bold mb-4 uppercase tracking-wide" style={{ color: '#ffffff' }}>Account</h4>
                         <ul className="space-y-3 text-sm">
                             <li>
                                 <Link to={ROUTES.login} className="text-neutral-300 hover:text-white transition-colors">
@@ -98,7 +98,7 @@ const Footer = () => {
 
                     {/* Help */}
                     <div>
-                        <h4 className="text-base font-bold text-white mb-4 uppercase tracking-wide">Help</h4>
+                        <h4 className="text-base font-bold mb-4 uppercase tracking-wide" style={{ color: '#ffffff' }}>Help</h4>
                         <ul className="space-y-3 text-sm">
                             <li>
                                 <Link to="/contact" className="text-neutral-300 hover:text-white transition-colors">
@@ -125,7 +125,7 @@ const Footer = () => {
 
                     {/* About */}
                     <div>
-                        <h4 className="text-base font-bold text-white mb-4 uppercase tracking-wide">About</h4>
+                        <h4 className="text-base font-bold mb-4 uppercase tracking-wide" style={{ color: '#ffffff' }}>About</h4>
                         <ul className="space-y-3 text-sm">
                             <li>
                                 <Link to="/about" className="text-neutral-300 hover:text-white transition-colors">

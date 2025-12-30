@@ -58,6 +58,9 @@
   --color-neutral-800: #4e4a45;
   --color-neutral-900: #292724;
   --color-neutral-950: #1a1918;
+  
+  /* Pure white for maximum contrast */
+  --color-white: #ffffff;
 
   /* Accent: Golden honey for warmth */
   --color-accent-50: #fefcf3;
