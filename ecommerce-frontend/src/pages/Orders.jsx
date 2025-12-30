@@ -6,8 +6,7 @@ import DashboardLayout from '../components/layout/DashboardLayout';
 import PageTransition from '../components/common/PageTransition';
 
 /**
- * Orders Page
- * Displays user's order history
+ * Orders Page - User order history
  */
 const Orders = () => {
     const [orders, setOrders] = useState([]);
@@ -44,17 +43,11 @@ const Orders = () => {
         <PageTransition>
             <DashboardLayout>
                 <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-                    {/* Header */}
                     <div className="px-6 py-5 border-b border-neutral-200">
-                        <h1 className="text-2xl font-serif font-medium text-neutral-900">
-                            Order History
-                        </h1>
-                        <p className="text-neutral-500 mt-1">
-                            View and track your orders
-                        </p>
+                        <h1 className="text-2xl font-serif font-medium text-neutral-900">Order History</h1>
+                        <p className="text-neutral-500 mt-1">View and track your orders</p>
                     </div>
 
-                    {/* Content */}
                     <div className="p-6">
                         {loading ? (
                             <div className="space-y-4">
@@ -75,50 +68,29 @@ const Orders = () => {
                                 </svg>
                                 <h3 className="text-lg font-medium text-neutral-900 mb-2">No orders yet</h3>
                                 <p className="text-neutral-500 mb-6">Start shopping to see your orders here.</p>
-                                <Link
-                                    to="/products"
-                                    className="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors"
-                                >
+                                <Link to="/products" className="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors">
                                     Browse Products
                                 </Link>
                             </div>
                         ) : (
                             <div className="space-y-4">
                                 {orders.map((order, index) => (
-                                    <motion.div
-                                        key={order.id}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: index * 0.1 }}
-                                    >
-                                        <Link
-                                            to={`/dashboard/orders/${order.order_number}`}
-                                            className="block p-5 border border-neutral-200 rounded-xl hover:border-primary-300 hover:shadow-md transition-all duration-200"
-                                        >
+                                    <motion.div key={order.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }}>
+                                        <Link to={`/dashboard/orders/${order.order_number}`} className="block p-5 border border-neutral-200 rounded-xl hover:border-primary-300 hover:shadow-md transition-all duration-200">
                                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                                 <div>
                                                     <div className="flex items-center gap-3 mb-2">
-                                                        <span className="font-mono font-medium text-neutral-900">
-                                                            {order.order_number}
-                                                        </span>
-                                                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>
-                                                            {order.status_label}
-                                                        </span>
+                                                        <span className="font-mono font-medium text-neutral-900">{order.order_number}</span>
+                                                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(order.status)}`}>{order.status_label}</span>
                                                     </div>
                                                     <p className="text-sm text-neutral-500">
-                                                        {new Date(order.created_at).toLocaleDateString('en-US', {
-                                                            year: 'numeric',
-                                                            month: 'long',
-                                                            day: 'numeric'
-                                                        })}
+                                                        {new Date(order.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                                                         <span className="mx-2">•</span>
                                                         {order.item_count} item{order.item_count !== 1 ? 's' : ''}
                                                     </p>
                                                 </div>
                                                 <div className="flex items-center gap-4">
-                                                    <span className="text-lg font-semibold text-neutral-900">
-                                                        ${order.totals?.total?.toFixed(2)}
-                                                    </span>
+                                                    <span className="text-lg font-semibold text-neutral-900">${order.totals?.total?.toFixed(2)}</span>
                                                     <svg className="w-5 h-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                                     </svg>
