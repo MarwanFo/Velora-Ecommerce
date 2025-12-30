@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,12 +35,36 @@ Route::prefix('v1')->group(function () {
         });
     });
 
-    // Product routes (will be added in product setup)
-    // Route::prefix('products')->group(base_path('routes/api/products.php'));
+    // Category routes (public)
+    Route::prefix('categories')->group(function () {
+        Route::get('/', [CategoryController::class, 'index']);
+        Route::get('/{slug}', [CategoryController::class, 'show']);
+    });
 
-    // Cart routes (will be added in cart setup)
-    // Route::prefix('cart')->group(base_path('routes/api/cart.php'));
+    // Product routes (public)
+    Route::prefix('products')->group(function () {
+        Route::get('/', [ProductController::class, 'index']);
+        Route::get('/featured', [ProductController::class, 'featured']);
+        Route::get('/{slug}', [ProductController::class, 'show']);
+    });
 
-    // Order routes (will be added in order setup)
-    // Route::prefix('orders')->group(base_path('routes/api/orders.php'));
+    // Admin routes (protected)
+    Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
+
+        // Category management
+        Route::post('/categories', [CategoryController::class, 'store']);
+        Route::put('/categories/{category}', [CategoryController::class, 'update']);
+        Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
+
+        // Product management
+        Route::post('/products', [ProductController::class, 'store']);
+        Route::put('/products/{product}', [ProductController::class, 'update']);
+        Route::delete('/products/{product}', [ProductController::class, 'destroy']);
+
+        // Product images
+        Route::post('/products/{product}/images', [ProductController::class, 'uploadImages']);
+        Route::put('/products/{product}/images/{imageId}/primary', [ProductController::class, 'setPrimaryImage']);
+        Route::delete('/products/{product}/images/{imageId}', [ProductController::class, 'deleteImage']);
+    });
 });
+

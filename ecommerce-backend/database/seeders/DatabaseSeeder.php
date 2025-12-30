@@ -15,11 +15,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Seed categories first (products depend on them)
+        $this->call([
+            CategorySeeder::class,
+            ProductSeeder::class,
+        ]);
 
+        // Create a test admin user
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Admin User',
+            'email' => 'admin@velora.com',
         ]);
     }
 }
