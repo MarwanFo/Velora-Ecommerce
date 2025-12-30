@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import productService from '../services/productService';
+import { useCart } from '../context/CartContext';
 import PageTransition from '../components/common/PageTransition';
 import Button from '../components/common/Button';
 
@@ -11,11 +12,18 @@ import Button from '../components/common/Button';
  */
 const ProductDetail = () => {
     const { slug } = useParams();
+    const { addItem } = useCart();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedImage, setSelectedImage] = useState(0);
     const [quantity, setQuantity] = useState(1);
+
+    const handleAddToCart = () => {
+        if (product) {
+            addItem(product, quantity);
+        }
+    };
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -165,8 +173,8 @@ const ProductDetail = () => {
                                             key={index}
                                             onClick={() => setSelectedImage(index)}
                                             className={`flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-colors ${selectedImage === index
-                                                    ? 'border-primary-600'
-                                                    : 'border-transparent hover:border-neutral-300'
+                                                ? 'border-primary-600'
+                                                : 'border-transparent hover:border-neutral-300'
                                                 }`}
                                         >
                                             <img
@@ -287,7 +295,7 @@ const ProductDetail = () => {
 
                                         {/* Add to Cart Button */}
                                         <div className="flex gap-4">
-                                            <Button variant="primary" size="lg" className="flex-1">
+                                            <Button variant="primary" size="lg" className="flex-1" onClick={handleAddToCart}>
                                                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                                                 </svg>

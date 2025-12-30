@@ -1,13 +1,16 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
+import CartSidebar from './components/cart/CartSidebar';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
+import Cart from './pages/Cart';
 import PropTypes from 'prop-types';
 
 /**
@@ -27,6 +30,7 @@ const Layout = ({ children }) => {
         </AnimatePresence>
       </main>
       {!hideLayout && <Footer />}
+      <CartSidebar />
     </div>
   );
 };
@@ -43,19 +47,21 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/:slug" element={<ProductDetail />} />
-          </Routes>
-        </Layout>
+        <CartProvider>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/:slug" element={<ProductDetail />} />
+              <Route path="/cart" element={<Cart />} />
+            </Routes>
+          </Layout>
+        </CartProvider>
       </AuthProvider>
     </Router>
   );
 }
 
 export default App;
-

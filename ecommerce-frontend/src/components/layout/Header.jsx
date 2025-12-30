@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { ROUTES, APP_CONFIG } from '../../constants/config';
+import { useCart } from '../../context/CartContext';
 
 /**
  * Header Component - Main navigation for the store
@@ -9,8 +10,7 @@ import { ROUTES, APP_CONFIG } from '../../constants/config';
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
-
-    const cartItemCount = 0; // Will be connected to cart context
+    const { totalItems, openCart } = useCart();
 
     return (
         <header className="sticky top-0 z-50 bg-neutral-50/95 backdrop-blur-sm border-b border-neutral-200">
@@ -84,20 +84,20 @@ const Header = () => {
                         </Link>
 
                         {/* Cart */}
-                        <Link
-                            to={ROUTES.cart}
+                        <button
+                            onClick={openCart}
                             className="relative p-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-xl transition-all"
                             aria-label="View cart"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                             </svg>
-                            {cartItemCount > 0 && (
+                            {totalItems > 0 && (
                                 <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary-600 text-white text-xs font-bold rounded-full flex items-center justify-center">
-                                    {cartItemCount}
+                                    {totalItems > 99 ? '99+' : totalItems}
                                 </span>
                             )}
-                        </Link>
+                        </button>
 
                         {/* Account */}
                         <Link
