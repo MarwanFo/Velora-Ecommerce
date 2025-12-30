@@ -1,4 +1,4 @@
-import api, { getCsrfCookie } from './api';
+import api from './api';
 import { API_ENDPOINTS } from '../constants/config';
 
 /**
@@ -11,13 +11,12 @@ const authService = {
    * Register a new user
    */
   async register(data) {
-    await getCsrfCookie();
     const response = await api.post(API_ENDPOINTS.register, data);
-    
+
     if (response.data.data.token) {
       localStorage.setItem('auth_token', response.data.data.token);
     }
-    
+
     return response.data;
   },
 
@@ -25,13 +24,12 @@ const authService = {
    * Login user
    */
   async login(credentials) {
-    await getCsrfCookie();
     const response = await api.post(API_ENDPOINTS.login, credentials);
-    
+
     if (response.data.data.token) {
       localStorage.setItem('auth_token', response.data.data.token);
     }
-    
+
     return response.data;
   },
 

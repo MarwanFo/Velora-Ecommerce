@@ -41,10 +41,15 @@ const Register = () => {
             await register(formData);
             navigate(ROUTES.home);
         } catch (error) {
-            if (error.response?.data?.errors) {
+            // Handle validation errors - api.js returns error.response.data directly for 422
+            if (error.errors) {
+                setErrors(error.errors);
+            } else if (error.response?.data?.errors) {
                 setErrors(error.response.data.errors);
+            } else if (error.message) {
+                setErrors({ general: error.message });
             } else {
-                setErrors({ general: error.response?.data?.message || 'Registration failed. Please try again.' });
+                setErrors({ general: 'Registration failed. Please try again.' });
             }
         } finally {
             setLoading(false);
