@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 /**
  * AdminProtectedRoute Component
- * Redirects to login if user is not authenticated or not an admin
+ * Redirects to admin login if user is not authenticated or not an admin
  */
 const AdminProtectedRoute = ({ children }) => {
     const { user, loading } = useAuth();
@@ -19,11 +19,11 @@ const AdminProtectedRoute = ({ children }) => {
     }
 
     if (!user) {
-        return <Navigate to="/login" state={{ from: location }} replace />;
+        return <Navigate to="/admin/login" state={{ from: location }} replace />;
     }
 
     if (!user.is_admin) {
-        return <Navigate to="/" replace />;
+        return <Navigate to="/admin/login" state={{ from: location }} replace />;
     }
 
     return children;
@@ -34,3 +34,4 @@ AdminProtectedRoute.propTypes = {
 };
 
 export default AdminProtectedRoute;
+

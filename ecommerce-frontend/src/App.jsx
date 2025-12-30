@@ -19,6 +19,7 @@ import Orders from './pages/Orders';
 import OrderDetail from './pages/OrderDetail';
 import Profile from './pages/Profile';
 // Admin Pages
+import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminOrders from './pages/admin/AdminOrders';
@@ -83,6 +84,9 @@ function App() {
               <Route path="/dashboard/profile" element={
                 <ProtectedRoute><Profile /></ProtectedRoute>
               } />
+
+              {/* Admin Login (Public) */}
+              <Route path="/admin/login" element={<AdminLogin />} />
 
               {/* Admin Routes (Admin Protected) */}
               <Route path="/admin" element={
