@@ -22,7 +22,9 @@ import Profile from './pages/Profile';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts from './pages/admin/AdminProducts';
+import AdminProductForm from './pages/admin/AdminProductForm';
 import AdminOrders from './pages/admin/AdminOrders';
+import AdminOrderDetail from './pages/admin/AdminOrderDetail';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminCategories from './pages/admin/AdminCategories';
 import PropTypes from 'prop-types';
@@ -95,11 +97,17 @@ function App() {
               <Route path="/vl-control-panel/inventory" element={
                 <AdminProtectedRoute><AdminProducts /></AdminProtectedRoute>
               } />
+              <Route path="/vl-control-panel/inventory/new" element={
+                <AdminProtectedRoute><AdminProductForm /></AdminProtectedRoute>
+              } />
+              <Route path="/vl-control-panel/inventory/:id/edit" element={
+                <AdminProtectedRoute><AdminProductForm /></AdminProtectedRoute>
+              } />
               <Route path="/vl-control-panel/transactions" element={
                 <AdminProtectedRoute><AdminOrders /></AdminProtectedRoute>
               } />
               <Route path="/vl-control-panel/transactions/:id" element={
-                <AdminProtectedRoute><AdminOrders /></AdminProtectedRoute>
+                <AdminProtectedRoute><AdminOrderDetail /></AdminProtectedRoute>
               } />
               <Route path="/vl-control-panel/accounts" element={
                 <AdminProtectedRoute><AdminUsers /></AdminProtectedRoute>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import AdminLayout from '../../components/admin/AdminLayout';
 import adminService from '../../services/adminService';
@@ -167,9 +168,12 @@ const AdminOrders = () => {
                                         return (
                                             <tr key={order.id} className="hover:bg-neutral-700/30">
                                                 <td className="px-6 py-4">
-                                                    <span className="text-primary-400 font-mono">
+                                                    <Link
+                                                        to={`/vl-control-panel/transactions/${order.id}`}
+                                                        className="text-primary-400 hover:text-primary-300 font-mono"
+                                                    >
                                                         {order.order_number || `#${order.id}`}
-                                                    </span>
+                                                    </Link>
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <p className="text-white">{customer.name}</p>
